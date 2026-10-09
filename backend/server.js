@@ -45,8 +45,41 @@ app.use("/api/messages", messagesRoutes);
 app.use("/api/internal-messages", internalMessagesRoutes);
 app.use("/api", dashboardRoutes);
 
+const publicDir = path.resolve(__dirname, "..");
+const publicPages = [
+    "index",
+    "about",
+    "services",
+    "lawyers",
+    "contact",
+    "login",
+    "register",
+    "dashboard"
+];
+
+app.use("/Css", express.static(path.join(publicDir, "Css")));
+app.use("/Js", express.static(path.join(publicDir, "Js")));
+
+app.get("/", (request, response) => {
+    response.sendFile(path.join(publicDir, "index.html"));
+});
+
+publicPages.forEach((page) => {
+    app.get(`/${page}.html`, (request, response) => {
+        response.sendFile(path.join(publicDir, `${page}.html`));
+    });
+});
+
+app.get("/favicon.ico", (request, response) => {
+    response.status(204).end();
+});
+
 app.use((request, response) => {
-    response.status(404).json({ message: "Route not found." });
+    if (request.path === "/api" || request.path.startsWith("/api/")) {
+        response.status(404).json({ message: "Route not found." });
+        return;
+    }
+    response.status(404).type("text/plain").send("Not found.");
 });
 
 app.use(errorHandler);
