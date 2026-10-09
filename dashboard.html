@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | Law Firm</title>
+    <meta name="description" content="View account details and consultation information in the law firm portal.">
+
+    <link rel="stylesheet" href="Css/dashboard.css">
+</head>
+
+<body>
+
+    <header class="dashboard-navbar">
+
+        <div class="logo">
+            <a href="index.html">LAW FIRM</a>
+        </div>
+
+        <div class="dashboard-user">
+            <span id="userName">Loading...</span>
+
+            <button id="logoutButton">
+                Logout
+            </button>
+        </div>
+
+    </header>
+
+    <main class="dashboard">
+
+        <section class="dashboard-header">
+
+            <span id="userRole">USER DASHBOARD</span>
+
+            <h1 id="dashboardTitle">
+                Welcome
+            </h1>
+
+            <p id="dashboardWelcome">
+                Review your account and the latest consultation information available to you.
+            </p>
+
+        </section>
+
+        <!-- ADMIN DASHBOARD -->
+
+        <section id="adminDashboard" class="admin-layout" aria-label="Administrator dashboard">
+            <aside class="admin-sidebar">
+                <p class="sidebar-heading">ADMINISTRATION</p>
+                <nav aria-label="Admin navigation">
+                    <button class="admin-nav-link active" type="button" data-admin-view="overview">Overview</button>
+                    <button class="admin-nav-link" type="button" data-admin-view="users">Users</button>
+                    <button class="admin-nav-link" type="button" data-admin-view="lawyers">Lawyers</button>
+                    <button class="admin-nav-link" type="button" data-admin-view="consultations">Consultations</button>
+                    <button class="admin-nav-link" type="button" data-admin-view="messages">Contact enquiries</button>
+                    <button class="admin-nav-link admin-inbox-nav-link" type="button" data-admin-view="inbox">
+                        <span>Lawyer inbox</span>
+                        <span id="adminInboxUnreadCount" class="admin-inbox-unread-count" aria-label="Unread messages" hidden></span>
+                    </button>
+                    <button class="admin-nav-link" type="button" data-admin-view="activity">Recent activity</button>
+                </nav>
+            </aside>
+
+            <div class="admin-content">
+                <div id="adminNotice" class="admin-notice" role="status" aria-live="polite" aria-atomic="true" hidden>
+                    <span id="adminNoticeMessage"></span>
+                    <button class="admin-notice-dismiss" type="button" aria-label="Dismiss notification">&times;</button>
+                </div>
+
+                <section class="admin-view active" data-admin-panel="overview">
+                    <div class="admin-view-heading">
+                        <div>
+                            <span class="section-eyebrow">FIRM OVERVIEW</span>
+                            <h2>Dashboard at a glance</h2>
+                            <p>Live figures and the latest activity across your firm.</p>
+                        </div>
+                        <button class="admin-button secondary" type="button" data-admin-refresh>Refresh data</button>
+                    </div>
+                    <div class="stats admin-stats">
+                        <article class="stat-card"><span>Total users</span><strong id="totalUsers">0</strong></article>
+                        <article class="stat-card"><span>Lawyers</span><strong id="totalLawyers">0</strong></article>
+                        <article class="stat-card"><span>Clients</span><strong id="totalClients">0</strong></article>
+                        <article class="stat-card"><span>Consultations</span><strong id="totalConsultations">0</strong></article>
+                        <article class="stat-card"><span>Pending consultations</span><strong id="pendingConsultations">0</strong></article>
+                        <article class="stat-card"><span>Completed consultations</span><strong id="completedConsultations">0</strong></article>
+                        <article class="stat-card"><span>Contact messages</span><strong id="totalMessages">0</strong></article>
+                    </div>
+                    <div class="dashboard-panel admin-panel">
+                        <div class="table-heading">
+                            <div><h3>Recent activity</h3><p>Latest changes and submissions</p></div>
+                            <button class="text-button" type="button" data-admin-go="activity">View all</button>
+                        </div>
+                        <div id="overviewActivity" class="activity-list"><p class="empty-state">Loading activity...</p></div>
+                    </div>
+                </section>
+
+                <section class="admin-view" data-admin-panel="users" hidden>
+                    <div class="admin-view-heading"><div><span class="section-eyebrow">PEOPLE</span><h2>Registered users</h2><p>Review administrator, lawyer, and client accounts.</p></div></div>
+                    <div class="dashboard-panel admin-panel">
+                        <div class="table-scroll"><table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Joined</th></tr></thead><tbody id="usersTable"><tr><td colspan="4" class="empty-state">Loading users...</td></tr></tbody></table></div>
+                    </div>
+                </section>
+
+                <section class="admin-view" data-admin-panel="lawyers" hidden>
+                    <div class="admin-view-heading"><div><span class="section-eyebrow">PEOPLE</span><h2>Lawyer directory</h2><p>Add, update, and remove lawyer profiles.</p></div><button class="admin-button" type="button" id="addLawyerButton">Add lawyer</button></div>
+                    <div class="dashboard-panel admin-panel">
+                        <div class="table-scroll"><table><thead><tr><th>Lawyer</th><th>Practice areas</th><th>Account</th><th>Directory</th><th>Actions</th></tr></thead><tbody id="lawyersTable"><tr><td colspan="5" class="empty-state">Loading lawyers...</td></tr></tbody></table></div>
+                    </div>
+                </section>
+
+                <section class="admin-view" data-admin-panel="consultations" hidden>
+                    <div class="admin-view-heading"><div><span class="section-eyebrow">CLIENT WORK</span><h2>Consultations</h2><p>Assign requests to lawyers and track progress.</p></div></div>
+                    <div class="dashboard-panel admin-panel">
+                        <div class="table-scroll"><table><thead><tr><th>Client / request</th><th>Lawyer</th><th>Received</th><th>Assign to</th><th>Status</th></tr></thead><tbody id="consultationsTable"><tr><td colspan="5" class="empty-state">Loading consultations...</td></tr></tbody></table></div>
+                    </div>
+                </section>
+
+                <section class="admin-view" data-admin-panel="messages" hidden>
+                    <div class="admin-view-heading"><div><span class="section-eyebrow">WEBSITE ENQUIRIES</span><h2>Contact messages</h2><p>Review and manage messages sent through the public contact form.</p></div></div>
+                    <div class="dashboard-panel admin-panel">
+                        <div class="table-scroll"><table><thead><tr><th>Sender</th><th>Service</th><th>Message</th><th>Received</th><th>Actions</th></tr></thead><tbody id="messagesTable"><tr><td colspan="5" class="empty-state">Loading messages...</td></tr></tbody></table></div>
+                    </div>
+                </section>
+
+                <section class="admin-view" data-admin-panel="inbox" hidden>
+                    <div class="admin-view-heading">
+                        <div><span class="section-eyebrow">INTERNAL COMMUNICATIONS</span><h2>Lawyer inbox</h2><p>Private conversations between you and your firm's lawyers.</p></div>
+                        <div class="activity-actions">
+                            <button class="admin-button" type="button" id="adminOpenInboxButton" aria-expanded="false" aria-controls="adminInternalInbox">Inbox</button>
+                            <button class="admin-button secondary" type="button" data-chat-refresh="admin" hidden>Refresh inbox</button>
+                            <button class="admin-inbox-close" type="button" id="adminCloseInboxButton" aria-label="Close lawyer inbox" title="Close inbox" hidden>&times;</button>
+                        </div>
+                    </div>
+                    <div id="adminInternalInbox" class="dashboard-panel internal-inbox" hidden>
+                        <aside class="internal-contact-panel">
+                            <div class="internal-section-heading"><span>YOUR CONTACTS</span><strong id="adminChatContactCount">0 lawyers</strong></div>
+                            <div id="adminChatContacts" class="internal-contact-list"><p class="empty-state">Loading lawyers...</p></div>
+                        </aside>
+                        <section class="internal-thread-panel" aria-label="Conversation">
+                            <header class="internal-thread-heading"><div class="internal-contact-avatar" id="adminChatAvatar">—</div><div><h3 id="adminChatName">Select a lawyer</h3><p id="adminChatEmail">Your conversations are private.</p></div></header>
+                            <div id="adminChatMessages" class="internal-message-list" aria-live="polite"><p class="empty-state">Choose a lawyer to view your conversation.</p></div>
+                            <form id="adminChatForm" class="internal-compose-form">
+                                <label class="visually-hidden" for="adminChatInput">Write a message</label>
+                                <textarea id="adminChatInput" rows="2" maxlength="5000" placeholder="Write a message..." required disabled></textarea>
+                                <button class="admin-button" type="submit" disabled>Send</button>
+                            </form>
+                        </section>
+                    </div>
+                </section>
+
+                <section class="admin-view" data-admin-panel="activity" hidden>
+                    <div class="admin-view-heading"><div><span class="section-eyebrow">AUDIT TRAIL</span><h2>Recent activity</h2><p>Recent account, consultation, lawyer, and message activity.</p></div><div class="activity-actions"><button class="admin-button secondary" type="button" data-admin-mark-all-read>Mark all as read</button><button class="admin-button secondary" type="button" data-admin-activity-refresh>Refresh activity</button></div></div>
+                    <div class="dashboard-panel admin-panel"><div id="activityList" class="activity-list"><p class="empty-state">Loading activity...</p></div></div>
+                </section>
+            </div>
+        </section>
+
+        <!-- LAWYER DASHBOARD -->
+
+        <section id="lawyerDashboard" class="lawyer-layout" aria-label="Lawyer dashboard">
+            <aside class="lawyer-sidebar">
+                <p class="lawyer-sidebar-label">LAWYER PORTAL</p>
+                <nav aria-label="Lawyer navigation">
+                    <button type="button" class="lawyer-nav-link active" data-lawyer-target="lawyerOverview">Overview</button>
+                    <button type="button" class="lawyer-nav-link" data-lawyer-target="lawyerAppointmentsPanel">Appointments</button>
+                    <button type="button" class="lawyer-nav-link" data-lawyer-target="lawyerConsultationsPanel">Consultations</button>
+                    <button type="button" class="lawyer-nav-link" data-lawyer-target="lawyerClientsPanel">My clients</button>
+                    <button type="button" class="lawyer-nav-link lawyer-inbox-nav-link" data-lawyer-target="lawyerInboxPanel">
+                        <span>Inbox</span>
+                        <span id="lawyerInboxUnreadCount" class="lawyer-inbox-unread-count" aria-label="Unread messages" hidden></span>
+                    </button>
+                </nav>
+                <div class="lawyer-sidebar-account">
+                    <span>Signed in as</span>
+                    <strong id="lawyerSidebarName">Lawyer</strong>
+                    <small id="lawyerSidebarEmail"></small>
+                </div>
+            </aside>
+
+            <div class="lawyer-content">
+                <p id="lawyerNotice" class="lawyer-notice" role="status" aria-live="polite" hidden></p>
+                <section id="lawyerOverview" class="lawyer-panel-section">
+                    <div class="lawyer-welcome">
+                        <div><span class="lawyer-eyebrow">PRACTICE OVERVIEW</span><h2>Your matters, at a glance.</h2><p>Review assigned cases, appointments, and client requests.</p></div>
+                        <div class="lawyer-profile-card">
+                            <span>YOUR PROFILE</span>
+                            <strong id="lawyerProfileName">Loading...</strong>
+                            <small id="lawyerProfileTitle">Loading...</small>
+                            <small id="lawyerProfileSpecialization">Loading...</small>
+                            <small id="lawyerProfileContact"></small>
+                        </div>
+                    </div>
+                    <div class="stats lawyer-stats">
+                        <article class="stat-card"><span>Assigned consultations</span><strong id="lawyerConsultations">0</strong></article>
+                        <article class="stat-card"><span>Pending</span><strong id="lawyerPending">0</strong></article>
+                        <article class="stat-card"><span>Approved</span><strong id="lawyerApproved">0</strong></article>
+                        <article class="stat-card"><span>Completed</span><strong id="lawyerCompleted">0</strong></article>
+                        <article class="stat-card"><span>Upcoming appointments</span><strong id="lawyerAppointments">0</strong></article>
+                        <article class="stat-card"><span>Assigned clients</span><strong id="lawyerClients">0</strong></article>
+                    </div>
+                    <div class="dashboard-panel lawyer-panel">
+                        <div class="lawyer-panel-heading"><div><span class="lawyer-eyebrow">RECENT WORK</span><h3>Recent consultations</h3></div><button class="lawyer-text-button" type="button" data-lawyer-target="lawyerConsultationsPanel">View all</button></div>
+                        <div id="lawyerRecentList" class="lawyer-recent-list"><p class="empty-state">Loading recent consultations...</p></div>
+                    </div>
+                </section>
+
+                <section id="lawyerAppointmentsPanel" class="dashboard-panel lawyer-panel lawyer-panel-section" hidden>
+                    <div class="lawyer-panel-heading"><div><span class="lawyer-eyebrow">YOUR CALENDAR</span><h3>Upcoming appointments</h3><p>Approved consultations with a scheduled date or time.</p></div></div>
+                    <div id="lawyerAppointmentsList" class="lawyer-appointment-list"><p class="empty-state">Loading appointments...</p></div>
+                </section>
+
+                <section id="lawyerConsultationsPanel" class="dashboard-panel lawyer-panel lawyer-panel-section" hidden>
+                    <div class="lawyer-panel-heading"><div><span class="lawyer-eyebrow">ASSIGNED CASES</span><h3>Consultations</h3><p>Only consultations assigned to your lawyer account are shown.</p></div></div>
+                    <div class="table-scroll"><table class="lawyer-table"><thead><tr><th>Client</th><th>Service &amp; message</th><th>Appointment</th><th>Status</th><th>Actions</th></tr></thead><tbody id="lawyerConsultationList"><tr><td colspan="5" class="empty-state">Loading consultations...</td></tr></tbody></table></div>
+                </section>
+
+                <section id="lawyerClientsPanel" class="dashboard-panel lawyer-panel lawyer-panel-section" hidden>
+                    <div class="lawyer-panel-heading"><div><span class="lawyer-eyebrow">CLIENT RELATIONSHIPS</span><h3>Assigned clients</h3><p>Clients with consultations assigned to you.</p></div></div>
+                    <div class="table-scroll"><table class="lawyer-table"><thead><tr><th>Client</th><th>Email</th><th>Phone</th><th>Matters</th></tr></thead><tbody id="lawyerClientList"><tr><td colspan="4" class="empty-state">Loading clients...</td></tr></tbody></table></div>
+                </section>
+
+                <section id="lawyerInboxPanel" class="lawyer-panel-section" hidden>
+                    <div class="lawyer-panel-heading internal-inbox-title">
+                        <div><span class="lawyer-eyebrow">INTERNAL COMMUNICATIONS</span><h3>Admin inbox</h3><p>Private conversations with your firm's administrators.</p></div>
+                        <div class="activity-actions">
+                            <button class="admin-button" type="button" id="lawyerOpenInboxButton" aria-expanded="false" aria-controls="lawyerInternalInbox">Inbox</button>
+                            <button class="admin-button secondary" type="button" data-chat-refresh="lawyer" hidden>Refresh inbox</button>
+                            <button class="admin-inbox-close" type="button" id="lawyerCloseInboxButton" aria-label="Close admin inbox" title="Close inbox" hidden>&times;</button>
+                        </div>
+                    </div>
+                    <div id="lawyerInternalInbox" class="dashboard-panel internal-inbox lawyer-internal-inbox" hidden>
+                        <aside class="internal-contact-panel">
+                            <div class="internal-section-heading"><span>YOUR CONTACTS</span><strong id="lawyerChatContactCount">0 admins</strong></div>
+                            <div id="lawyerChatContacts" class="internal-contact-list"><p class="empty-state">Loading administrators...</p></div>
+                        </aside>
+                        <section class="internal-thread-panel" aria-label="Conversation">
+                            <header class="internal-thread-heading"><div class="internal-contact-avatar" id="lawyerChatAvatar">—</div><div><h3 id="lawyerChatName">Select an administrator</h3><p id="lawyerChatEmail">Your conversations are private.</p></div></header>
+                            <div id="lawyerChatMessages" class="internal-message-list" aria-live="polite"><p class="empty-state">Choose an administrator to view your conversation.</p></div>
+                            <form id="lawyerChatForm" class="internal-compose-form">
+                                <label class="visually-hidden" for="lawyerChatInput">Write a message</label>
+                                <textarea id="lawyerChatInput" rows="2" maxlength="5000" placeholder="Write a message..." required disabled></textarea>
+                                <button class="admin-button" type="submit" disabled>Send</button>
+                            </form>
+                        </section>
+                    </div>
+                </section>
+            </div>
+        </section>
+
+        <!-- CLIENT DASHBOARD -->
+
+        <section id="clientDashboard" class="client-layout" aria-label="Client dashboard">
+            <aside class="client-sidebar">
+                <p class="client-sidebar-label">CLIENT PORTAL</p>
+                <nav aria-label="Client navigation">
+                    <button type="button" class="client-nav-link active" data-client-target="clientOverview">Overview</button>
+                    <button type="button" class="client-nav-link" data-client-target="clientAppointmentsPanel">Appointments</button>
+                    <button type="button" class="client-nav-link" data-client-target="clientHistoryPanel">Consultation history</button>
+                    <button type="button" class="client-nav-link" data-client-target="clientUpdatesPanel">Firm updates</button>
+                    <button type="button" class="client-nav-link" data-client-target="clientRequestPanel">Request consultation</button>
+                </nav>
+                <div class="client-sidebar-account">
+                    <span>Signed in as</span>
+                    <strong id="clientSidebarName">Client</strong>
+                    <small id="clientSidebarEmail"></small>
+                </div>
+            </aside>
+
+            <div class="client-content">
+                <p id="clientNotice" class="client-notice" role="status" aria-live="polite" hidden></p>
+
+                <section id="clientOverview" class="client-panel-section">
+                    <div class="client-welcome">
+                        <div><span class="client-eyebrow">CLIENT PORTAL</span><h2>Your legal matters, clearly organized.</h2><p>Review your requests, appointments, and updates from the firm.</p></div>
+                        <div class="client-account-card"><span>ACCOUNT</span><strong id="clientAccountName">Loading...</strong><small id="clientAccountEmail">Loading...</small><small id="clientAccountPhone"></small></div>
+                    </div>
+                    <div class="stats client-stats">
+                        <article class="stat-card"><span>Total consultations</span><strong id="clientConsultations">0</strong></article>
+                        <article class="stat-card"><span>Pending</span><strong id="clientPending">0</strong></article>
+                        <article class="stat-card"><span>Approved / scheduled</span><strong id="clientApproved">0</strong></article>
+                        <article class="stat-card"><span>Completed</span><strong id="clientCompleted">0</strong></article>
+                        <article class="stat-card"><span>Upcoming appointments</span><strong id="clientAppointments">0</strong></article>
+                    </div>
+                    <aside class="client-next-step">
+                        <div>
+                            <span class="client-eyebrow">HERE WHEN YOU NEED US</span>
+                            <h3>Have a new legal matter?</h3>
+                            <p>Send the firm a consultation request and we’ll follow up with you.</p>
+                        </div>
+                        <button class="client-submit-button client-next-step-button" type="button" data-client-target="clientRequestPanel">
+                            Request a consultation <span aria-hidden="true">→</span>
+                        </button>
+                    </aside>
+                </section>
+
+                <section id="clientAppointmentsPanel" class="dashboard-panel client-panel-section" hidden>
+                    <div class="client-panel-heading"><div><span class="client-eyebrow">YOUR CALENDAR</span><h3>Upcoming appointments</h3><p>Scheduled consultations with a confirmed date.</p></div></div>
+                    <div id="clientAppointmentsList" class="client-appointment-list"><p class="empty-state">Loading appointments...</p></div>
+                </section>
+
+                <section id="clientHistoryPanel" class="dashboard-panel client-panel-section" hidden>
+                    <div class="client-panel-heading"><div><span class="client-eyebrow">YOUR MATTERS</span><h3>Consultation history</h3><p>Requests and their latest status.</p></div></div>
+                    <div class="table-scroll"><table class="client-table"><thead><tr><th>Service</th><th>Assigned lawyer</th><th>Consultation date</th><th>Requested</th><th>Status</th></tr></thead><tbody id="clientConsultationList"><tr><td colspan="5" class="empty-state">Loading consultations...</td></tr></tbody></table></div>
+                </section>
+
+                <section id="clientUpdatesPanel" class="dashboard-panel client-panel-section" hidden>
+                    <div class="client-panel-heading"><div><span class="client-eyebrow">FROM THE FIRM</span><h3>Consultation updates</h3><p>Status and assignment updates on your requests.</p></div></div>
+                    <div id="clientUpdatesList" class="client-update-list"><p class="empty-state">Loading updates...</p></div>
+                </section>
+
+                <section id="clientRequestPanel" class="dashboard-panel client-panel-section" hidden>
+                    <div class="client-panel-heading"><div><span class="client-eyebrow">NEXT STEP</span><h3>Request a consultation</h3><p>Tell us which service you need and a little about your matter.</p></div></div>
+                    <form id="clientConsultationForm" class="client-request-form">
+                        <label for="consultationService">Legal service</label>
+                        <select id="consultationService" name="service" required>
+                            <option value="">Select a service</option>
+                            <option value="corporate">Corporate Law</option>
+                            <option value="family">Family Law</option>
+                            <option value="property">Property Law</option>
+                            <option value="criminal">Criminal Law</option>
+                            <option value="employment">Employment Law</option>
+                            <option value="litigation">Litigation</option>
+                        </select>
+                        <label for="preferredDate">Preferred consultation date <span>(optional)</span></label>
+                        <input id="preferredDate" name="preferredDate" type="date">
+                        <label for="consultationMessage">Brief description</label>
+                        <textarea id="consultationMessage" name="message" rows="5" maxlength="10000" required placeholder="Please avoid including highly sensitive information in this form."></textarea>
+                        <div class="client-form-footer"><p>This request is not a confirmation of an appointment or an attorney-client relationship.</p><button class="client-submit-button" type="submit">Submit consultation request</button></div>
+                    </form>
+                </section>
+            </div>
+        </section>
+
+    </main>
+
+    <dialog id="lawyerDialog" class="lawyer-dialog">
+        <form id="lawyerForm" class="lawyer-form">
+            <div class="dialog-heading"><div><span class="section-eyebrow">LAWYER PROFILE</span><h2 id="lawyerDialogTitle">Add lawyer</h2></div><button class="icon-button" type="button" id="closeLawyerDialog" aria-label="Close">×</button></div>
+            <input type="hidden" id="lawyerId">
+            <label>Name<input id="lawyerName" maxlength="120" required></label>
+            <label>Title<input id="lawyerTitle" maxlength="120" required></label>
+            <label>Practice areas<input id="lawyerPracticeAreas" maxlength="255" required></label>
+            <label>Lawyer email<input id="lawyerEmail" type="email" maxlength="190"></label>
+            <label>Phone<input id="lawyerPhone" maxlength="40"></label>
+            <label id="lawyerAccountLinkField" hidden>Edit linked lawyer account<select id="lawyerUserId"><option value="">No linked account</option></select></label>
+            <label>Biography<textarea id="lawyerBio" rows="4" maxlength="20000"></textarea></label>
+            <div class="dialog-actions"><button class="admin-button secondary" type="button" id="cancelLawyerDialog">Cancel</button><button class="admin-button" type="submit">Save lawyer</button></div>
+        </form>
+    </dialog>
+
+    <dialog id="temporaryPasswordDialog" class="lawyer-dialog">
+        <div class="lawyer-form">
+            <div class="dialog-heading"><div><span class="section-eyebrow">ONE-TIME PASSWORD</span><h2>Share with the lawyer</h2></div></div>
+            <p class="temporary-password-help">Share these login details with the lawyer securely. The password is shown only once, and the lawyer must choose a new password after signing in.</p>
+            <label for="temporaryAccountEmail">Login email</label>
+            <input id="temporaryAccountEmail" type="email" readonly autocomplete="off">
+            <label for="temporaryPasswordValue">Temporary password</label>
+            <input id="temporaryPasswordValue" type="text" readonly autocomplete="off">
+            <div class="dialog-actions">
+                <button class="admin-button secondary" type="button" id="copyTemporaryPassword">Copy password</button>
+                <button class="admin-button" type="button" id="closeTemporaryPasswordDialog">Done</button>
+            </div>
+            <p id="temporaryPasswordCopyStatus" class="temporary-password-help" role="status" aria-live="polite"></p>
+        </div>
+    </dialog>
+
+    <dialog id="requiredPasswordDialog" class="lawyer-dialog" aria-labelledby="requiredPasswordTitle">
+        <form id="requiredPasswordForm" class="lawyer-form">
+            <div class="dialog-heading"><div><span class="section-eyebrow">ACCOUNT SECURITY</span><h2 id="requiredPasswordTitle">Choose a new password</h2></div></div>
+            <p class="temporary-password-help">Your administrator issued a temporary password. Set a new password to continue to your lawyer dashboard.</p>
+            <label>New password<input id="newLawyerPassword" type="password" minlength="8" maxlength="72" autocomplete="new-password" required></label>
+            <label>Confirm new password<input id="confirmLawyerPassword" type="password" minlength="8" maxlength="72" autocomplete="new-password" required></label>
+            <p id="requiredPasswordError" class="temporary-password-help" role="alert" aria-live="assertive"></p>
+            <div class="dialog-actions"><button class="admin-button" type="submit">Save new password</button></div>
+        </form>
+    </dialog>
+
+    <script src="Js/dashboard.js"></script>
+</body>
+</html>

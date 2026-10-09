@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Client Account | Law Firm</title>
+    <meta name="description" content="Create a client account to access your law firm dashboard.">
+
+    <link rel="stylesheet" href="Css/login.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="logo">
+            <a href="index.html">LAW FIRM</a>
+        </div>
+
+        <a href="login.html">Sign In</a>
+    </header>
+
+    <main>
+        <section class="login-section">
+            <div class="login-card">
+                <span>CLIENT PORTAL</span>
+
+                <h1>Create Account</h1>
+
+                <p>
+                    Create a client account to view your consultations
+                    and access your dashboard.
+                </p>
+
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            maxlength="120"
+                            autocomplete="name"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            maxlength="190"
+                            autocomplete="email"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            minlength="8"
+                            maxlength="72"
+                            autocomplete="new-password"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input
+                            type="password"
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            minlength="8"
+                            maxlength="72"
+                            autocomplete="new-password"
+                            required
+                        >
+                    </div>
+
+                    <button type="submit">Create Client Account</button>
+                    <p id="registerMessage" role="status" aria-live="polite"></p>
+                </form>
+
+                <a class="account-link" href="login.html">Already have an account? Sign in</a>
+            </div>
+        </section>
+    </main>
+
+    <script src="Js/register.js"></script>
+</body>
+</html>
